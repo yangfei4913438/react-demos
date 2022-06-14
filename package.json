@@ -1,7 +1,11 @@
 {
   "name": "react-demos",
   "scripts": {
-    "dev:redux": "pnpm --filter 'redux-use-hooks' dev"
+    "dev:redux": "pnpm --filter 'redux-use-hooks' dev",
+    "dev:table": "pnpm --filter 'react-window-table' dev",
+    "dev:live": "pnpm --filter 'react-live-demo' dev",
+    "dev:swiper": "pnpm --filter 'react-tiga-swiper' dev",
+    "dev:dnd": "pnpm --filter 'dnd-kit-demo' dev"
   },
   "devDependencies": {
     "prettier": "^2.7.0"
