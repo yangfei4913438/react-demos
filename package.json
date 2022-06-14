@@ -1,0 +1,13 @@
+{
+  "name": "react-demos",
+  "scripts": {
+    "dev:redux": "pnpm --filter 'redux-use-hooks' dev"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.0"
+  },
+  "engines": {
+    "node": ">=16",
+    "pnpm": ">=7"
+  }
+}
