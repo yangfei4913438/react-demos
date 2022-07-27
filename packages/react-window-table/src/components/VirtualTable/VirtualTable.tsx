@@ -104,6 +104,7 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
   // 表格宽度
   const [tableWidth, setTableWidth] = useState<number>(0);
 
+  // 宽度变更
   const onChangeWidth = (key: string, x: number) => {
     // 空值是重置宽度
     if (key === '' || x === 0) {
@@ -119,31 +120,13 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
 
     // 宽度最小不能低于100px
     if (currentWidth > 100 && nextWidth > 100) {
-      resizeCols({ dataKey: key, deltaX: x });
-    }
-  };
-
-  // 变更数据
-  const resizeCols = ({ dataKey, deltaX }: { dataKey: string; deltaX: number }) => {
-    if (tableWidth === 0) return;
-    // 当前的宽度
-    const currentWidth = widths[dataKey] * tableWidth + deltaX;
-
-    // 计算出百分比
-    const currentPercent = currentWidth / tableWidth;
-
-    // 下一个宽度
-    const index = labels.indexOf(dataKey);
-    const nextDataKey = labels[index + 1];
-    const nextWidth = widths[nextDataKey] * tableWidth - deltaX;
-    const nextPercent = nextWidth / tableWidth;
-
-    // 宽度最小不能低于100px
-    if (currentWidth > 100 && nextWidth > 100) {
-      // 更新变化
+      // 计算出百分比
+      const currentPercent = currentWidth / tableWidth;
+      const nextPercent = nextWidth / tableWidth;
+      // 更新宽度比例
       changeWidths((prev) => ({
         ...prev,
-        [dataKey]: currentPercent,
+        [key]: currentPercent,
         [nextDataKey]: nextPercent,
       }));
     }

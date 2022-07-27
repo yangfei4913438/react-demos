@@ -1,5 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import cx from 'classnames';
 import DragResize from './DragResize';
 import { VirtualTableContext } from './consts';
@@ -22,6 +23,7 @@ const TableHead: FC<ITableHead> = ({ id, dragOverlay = false, children }) => {
     canDragSortColumn,
     filterRenders,
     sortRenders,
+    titleHeight,
     onChangeWidth,
   } = useContext(VirtualTableContext);
 
@@ -33,26 +35,25 @@ const TableHead: FC<ITableHead> = ({ id, dragOverlay = false, children }) => {
   // 渲染拖拽对象的时候，key 不能是最后一个
   const canRender = id !== labels[labels.length - 1];
 
-  const styles = {
-    transition,
-    '--translate-x': transform?.x && `${Math.round(transform.x)}px`,
-    '--scale-x': transform?.scaleX && `${transform.scaleX}`,
-    transform: 'translate3d(var(--translate-x, 0), 0, 0) scaleX(var(--scale-x, 1)) scaleY(1)',
-  } as React.CSSProperties;
-
   return (
-    <div ref={setNodeRef} className="box-border touch-manipulation" {...attributes} style={styles}>
+    <div
+      ref={setNodeRef}
+      className="box-border touch-manipulation"
+      {...attributes}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+    >
       <div
         className={cx(
-          'select-none',
+          'select-none flex items-center',
           canDragSortColumn && isDragging && 'z-0 opacity-50',
-          canDragSortColumn && dragOverlay && 'cursor-grabbing shadow-lg bg-white opacity-90',
+          canDragSortColumn && dragOverlay && 'cursor-grabbing shadow-lg bg-white',
           canDragSortColumn && !dragOverlay && 'cursor-grab touch-manipulation',
           {
-            'px-3': textLayout === 'left',
-            'text-center': textLayout === 'center',
+            'px-3 justify-start': textLayout === 'left',
+            'justify-center': textLayout === 'center',
           }
         )}
+        style={{ height: titleHeight }}
         {...listeners}
         onClick={(e) => e.stopPropagation()}
       >
