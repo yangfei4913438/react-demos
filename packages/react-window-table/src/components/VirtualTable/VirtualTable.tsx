@@ -260,9 +260,9 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
                     row={row}
                     rowClass={rowClass}
                     style={style}
-                    index={index + fixedTopCount}
+                    index={index}
                     isScrolling={isScrolling}
-                    key={index + fixedTopCount}
+                    key={index}
                   />
                 );
               }}

@@ -74,7 +74,7 @@ const Table: FC<IProps> = () => {
       send['filter'] = filterObj;
     }
 
-    console.log('请求数据:', send);
+    console.log('请求数据:', send, ' 选中项:', checked);
 
     // 返回mock数据
     return makeData(page_size);
