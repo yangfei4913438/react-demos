@@ -173,6 +173,7 @@ const TableWrapper = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
                 style={{ top: index * rowHeight, height: rowHeight }}
                 index={index}
                 key={index}
+                id={index}
               />
             );
           })}

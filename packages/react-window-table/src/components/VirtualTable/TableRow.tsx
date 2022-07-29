@@ -10,6 +10,7 @@ interface TableRowProps<T> {
   index: number;
   isScrolling?: boolean;
   row: T;
+  id: number;
 }
 
 const TableRow: FC<TableRowProps<any>> = <T,>({
@@ -18,6 +19,7 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
   index,
   isScrolling,
   row,
+  id,
 }: TableRowProps<T>) => {
   const {
     textLayout,
@@ -44,14 +46,14 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
       )}
       style={{
         ...style,
-        top: (index + 1) * rowHeight + titleHeight,
+        top: id * rowHeight + titleHeight,
         width: realWidth,
       }}
     >
       {!isScrolling && canChecked && (
         <IndeterminateCheckbox
-          checked={checked.includes(index)}
-          onClick={() => handleCheckBox(index, checked, setChecked)}
+          checked={checked.includes(id)}
+          onClick={() => handleCheckBox(id, checked, setChecked)}
         />
       )}
       {isScrolling

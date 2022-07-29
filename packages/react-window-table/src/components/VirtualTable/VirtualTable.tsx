@@ -257,6 +257,7 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
                     index={index}
                     isScrolling={isScrolling}
                     key={index}
+                    id={index + fixedTopCount}
                   />
                 );
               }}
