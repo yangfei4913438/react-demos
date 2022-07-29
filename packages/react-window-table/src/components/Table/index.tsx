@@ -1,4 +1,4 @@
-import { FC, useState, useLayoutEffect } from 'react';
+import { FC, useState, useLayoutEffect, useMemo } from 'react';
 
 import { IPerson, makeData, PersonLabels } from './makeData';
 import { VirtualTable } from '../VirtualTable';
@@ -322,6 +322,16 @@ const Table: FC<IProps> = () => {
   //   return <div className="w-full text-center">Scrolling {index}</div>;
   // };
 
+  // 空态图
+  const emptyDom = useMemo(
+    () => (
+      <div className="w-full h-full flex items-center justify-center text-gray-500 bg-[#f6f6f6]">
+        Empty Table
+      </div>
+    ),
+    []
+  );
+
   return (
     <div className="p-2 w-full h-screen flex flex-col">
       <div className="navbar bg-neutral text-neutral-content flex justify-between px-8">
@@ -359,6 +369,7 @@ const Table: FC<IProps> = () => {
           setChecked={setChecked}
           sortRenders={sortRenders}
           filterRenders={filterRenders}
+          emptyNode={emptyDom}
         />
       </div>
     </div>

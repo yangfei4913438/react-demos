@@ -45,6 +45,7 @@ const TableHead: FC<ITableHead> = ({ id, dragOverlay = false, children }) => {
       <div
         className={cx(
           'select-none flex items-center',
+          !canDragSortColumn && 'cursor-default',
           canDragSortColumn && isDragging && 'z-0 opacity-50',
           canDragSortColumn && dragOverlay && 'cursor-grabbing shadow-lg bg-white',
           canDragSortColumn && !dragOverlay && 'cursor-grab touch-manipulation',

@@ -1,4 +1,4 @@
-import React, { type FC, type Dispatch, type SetStateAction, useState } from 'react';
+import { type ReactNode, type FC, type Dispatch, type SetStateAction, useState } from 'react';
 import {
   FixedSizeList,
   type ListChildComponentProps,
@@ -7,7 +7,7 @@ import {
 import AutoSizer from 'react-virtualized-auto-sizer';
 import TableWrapper from './TableWrapper';
 import TableRow from './TableRow';
-import { type IWidths, VirtualTableContext } from './consts';
+import { type IWidths, VirtualTableContext, checkBoxWidth } from './consts';
 
 export interface VirtualTableProps<T> {
   // 展示的数据
@@ -29,15 +29,15 @@ export interface VirtualTableProps<T> {
   changeLabels: Dispatch<SetStateAction<string[]>>;
 
   // 列的排序渲染
-  sortRenders?: { [key: string]: React.ReactNode };
+  sortRenders?: { [key: string]: ReactNode };
   // 列的筛选渲染
-  filterRenders?: { [key: string]: React.ReactNode };
+  filterRenders?: { [key: string]: ReactNode };
   // 列元素的渲染方法, 如: { name: this.cellRender, description: this.cellRender };
-  cellRenders: { [key: string]: (row: T) => React.ReactNode };
+  cellRenders: { [key: string]: (row: T) => ReactNode };
   // 表头的渲染方法
-  headRenders: { [key: string]: React.ReactNode };
+  headRenders: { [key: string]: ReactNode };
   // 渲染滚动行
-  scrollingRender?: (index: number) => React.ReactNode;
+  scrollingRender?: (index: number) => ReactNode;
 
   // 请求下页数据
   nextPage: () => void;
@@ -66,7 +66,10 @@ export interface VirtualTableProps<T> {
   // 选中的对象
   checked?: number[];
   // 更新选中的对象
-  setChecked?: Dispatch<React.SetStateAction<number[]>>;
+  setChecked?: Dispatch<SetStateAction<number[]>>;
+
+  // 空态图
+  emptyNode?: ReactNode;
 }
 
 const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
@@ -100,6 +103,8 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
   canChecked = true,
   checked = [],
   setChecked = () => undefined,
+
+  emptyNode,
 }: VirtualTableProps<T>) => {
   // 表格宽度
   const [tableWidth, setTableWidth] = useState<number>(0);
@@ -134,7 +139,7 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
 
   const realWidth = () => {
     const res = labels.map((key) => widths[key] * tableWidth).reduce((a, b) => a + b);
-    return canChecked ? res + 44 : res;
+    return canChecked ? res + checkBoxWidth : res;
   };
 
   // 监听渲染的行索引
@@ -165,14 +170,14 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
   // 获取左侧绝对定位的距离
   const getLeftWidth = (idx: number) => {
     if (idx === 0) {
-      return canChecked ? 44 : 0;
+      return canChecked ? checkBoxWidth : 0;
     }
     const cols = labels
       .map((key) => widths[key] * tableWidth)
       .slice(0, idx)
       .reduce((a, b) => a + b);
 
-    return canChecked ? cols + 44 : cols;
+    return canChecked ? cols + checkBoxWidth : cols;
   };
 
   // 获取右侧绝对定位的距离
@@ -185,6 +190,10 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
       .slice(idx + 1)
       .reduce((a, b) => a + b);
   };
+
+  // 填充的mock数据(修复内部列表为空时，header拖拽数据会异常的情况)
+  const emptyRow: { [key: string]: any } = {};
+  labels.forEach((o, idx) => (emptyRow[o] = `row_${idx}`));
 
   return (
     <AutoSizer onResize={({ width }) => setTableWidth(width)}>
@@ -222,8 +231,13 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
           >
             <FixedSizeList
               innerElementType={TableWrapper}
-              itemData={{ list: list.slice(fixedTopCount, list.length) }}
-              itemCount={list.length - fixedTopCount} // 一共有多少行
+              itemData={{
+                list:
+                  list.length > fixedTopCount
+                    ? list.slice(fixedTopCount, list.length)
+                    : [emptyRow as T],
+              }}
+              itemCount={list.length > fixedTopCount ? list.length - fixedTopCount : 1} // 一共有多少行
               height={height}
               width={width}
               itemSize={rowHeight}
@@ -253,6 +267,14 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
                 );
               }}
             </FixedSizeList>
+            {list.length === 0 && (
+              <div
+                className="z-50 absolute bottom-0 left-0 bg-white"
+                style={{ width, top: titleHeight, height: height - titleHeight }}
+              >
+                {emptyNode}
+              </div>
+            )}
           </VirtualTableContext.Provider>
         );
       }}

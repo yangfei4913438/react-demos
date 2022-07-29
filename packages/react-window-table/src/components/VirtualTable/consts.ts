@@ -1,10 +1,13 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { type Dispatch, type ReactNode, type SetStateAction, createContext } from 'react';
+
+// 勾选框的宽度
+export const checkBoxWidth = 44;
 
 export interface IWidths {
   [key: string]: number;
 }
 
-export const VirtualTableContext = React.createContext<{
+export const VirtualTableContext = createContext<{
   // 展示的数据
   list: any[];
   // 渲染列
@@ -42,11 +45,11 @@ export const VirtualTableContext = React.createContext<{
   // 选中的对象
   checked: number[];
   // 更新选中的对象
-  setChecked: Dispatch<React.SetStateAction<number[]>>;
+  setChecked: Dispatch<SetStateAction<number[]>>;
   // 列的筛选渲染
-  filterRenders?: { [key: string]: React.ReactNode };
+  filterRenders?: { [key: string]: ReactNode };
   // 列的排序渲染
-  sortRenders?: { [key: string]: React.ReactNode };
+  sortRenders?: { [key: string]: ReactNode };
   // 修改拖拽偏移量
   onChangeWidth: (key: string, x: number) => void;
   // 表的完整宽度
@@ -56,7 +59,7 @@ export const VirtualTableContext = React.createContext<{
   // 获取右侧绝对定位的距离
   getRightWidth: (idx: number) => number;
   // 渲染滚动行
-  scrollingRender?: (index: number) => React.ReactNode;
+  scrollingRender?: (index: number) => ReactNode;
 }>({
   list: [],
   columns: [],

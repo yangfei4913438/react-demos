@@ -81,6 +81,7 @@ const TableWrapper = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
             }}
             onDragEnd={({ over }) => {
               if (!over) return;
+              // 这里是异步执行的，所以不影响后面的代码执行。
               setActiveLabel(null);
               const overIndex = getIndex(String(over.id));
               if (activeIndex !== overIndex) {
@@ -103,7 +104,7 @@ const TableWrapper = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
               {canChecked && (
                 <IndeterminateCheckbox
                   indeterminate={checked.length > 0 && checked.length !== list.length}
-                  checked={checked.length === list.length}
+                  checked={checked.length === list.length && list.length > 0}
                   onClick={() => handleAllChecked()}
                 />
               )}

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { VirtualTableContext } from './consts';
+import { VirtualTableContext, checkBoxWidth } from './consts';
 
 const IndeterminateCheckbox = React.forwardRef(
   (
@@ -24,7 +24,10 @@ const IndeterminateCheckbox = React.forwardRef(
     return (
       <div
         className="px-3 sticky z-50 left-0 h-full flex items-center bg-inherit"
-        style={{ boxShadow: fixedLeftCount === 0 ? '2px 0 4px 0px #eee' : 'unset' }}
+        style={{
+          boxShadow: fixedLeftCount === 0 ? '2px 0 4px 0px #eee' : 'unset',
+          width: checkBoxWidth,
+        }}
       >
         <input
           type="checkbox"
