@@ -246,14 +246,8 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
               useIsScrolling={!!scrollingRender}
             >
               {(props: ListChildComponentProps<{ list: T[] }>) => {
-                const {
-                  data: { list },
-                  index,
-                  style,
-                  isScrolling,
-                } = props;
-
-                const row = list[index];
+                const { data, index, style, isScrolling } = props;
+                const row = data.list[index];
 
                 return (
                   <TableRow

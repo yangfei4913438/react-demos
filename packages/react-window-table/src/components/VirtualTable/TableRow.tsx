@@ -23,6 +23,7 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
     textLayout,
     labels,
     realWidth,
+    rowHeight,
     titleHeight,
     canChecked,
     checked,
@@ -38,12 +39,12 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
   return (
     <div
       className={cx(
-        'inline-flex items-center bg-white border-b border-b-[#eee] hover:bg-[#f6f6f6]',
+        'inline-flex items-center border-b border-b-[#eee] bg-white hover:bg-[#f6f6f6]',
         rowClass
       )}
       style={{
         ...style,
-        top: (style?.top as number) + titleHeight,
+        top: (index + 1) * rowHeight + titleHeight,
         width: realWidth,
       }}
     >
@@ -74,11 +75,11 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
 
             return (
               <div
-                className={cx('overflow-hidden relative h-full flex flex-col justify-center', {
+                className={cx('relative flex h-full flex-col justify-center overflow-hidden', {
                   'px-3': textLayout === 'left',
                   'text-center': textLayout === 'center',
-                  'sticky z-50 bg-inherit left-0': idx < fixedLeftCount,
-                  'sticky z-50 bg-inherit right-0': idx > labels.length - fixedRightCount - 1,
+                  'bg-inherit sticky left-0 z-50': idx < fixedLeftCount,
+                  'bg-inherit sticky right-0 z-50': idx > labels.length - fixedRightCount - 1,
                 })}
                 style={style}
                 key={idx}
