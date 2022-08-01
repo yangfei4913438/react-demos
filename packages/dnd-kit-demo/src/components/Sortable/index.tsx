@@ -17,6 +17,7 @@ import {
   SortableContext,
   horizontalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 import { createRange } from './createRange';
 
@@ -90,18 +91,13 @@ export function SortableItem({ id, dragOverlay }: SortableItemProps) {
     id,
   });
 
-  const styles = {
-    transition,
-    '--translate-x': transform ? `${Math.round(transform.x)}px` : undefined,
-    '--translate-y': transform ? `${Math.round(transform.y)}px` : undefined,
-    '--scale-x': transform?.scaleX ? `${transform.scaleX}` : undefined,
-    '--scale-y': transform?.scaleY ? `${transform.scaleY}` : undefined,
-    transform:
-      'translate3d(var(--translate-x, 0), var(--translate-y, 0), 0) scaleX(var(--scale-x, 1)) scaleY(var(--scale-y, 1))',
-  } as React.CSSProperties;
-
   return (
-    <div ref={setNodeRef} className="box-border touch-manipulation" style={styles} {...attributes}>
+    <div
+      ref={setNodeRef}
+      className="box-border touch-manipulation"
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      {...attributes}
+    >
       <div
         className={classNames(
           'w-16 h-16 relative flex items-center justify-center bg-white text-gray-700 shadow rounded border',
