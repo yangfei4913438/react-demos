@@ -14,7 +14,7 @@ import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-
 
 import TableHead from './TableHead';
 import IndeterminateCheckbox from './IndeterminateCheckbox';
-import { type IWidths, VirtualTableContext } from './consts';
+import { type IHeaderTree, type IWidths, VirtualTableContext, checkBoxWidth } from './consts';
 import TableRow from './TableRow';
 
 const TableWrapper = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
@@ -40,6 +40,10 @@ const TableWrapper = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
       realWidth,
       getLeftWidth,
       getRightWidth,
+      headerList,
+      headRenders,
+      headerTrees,
+      headerColumnWidth,
     } = useContext(VirtualTableContext);
 
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
@@ -57,15 +61,73 @@ const TableWrapper = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
       }
     };
 
+    // 判断两个标题列，是否属于同一个父列
+    const sameParent = (source: string, target: string) => {
+      // 定义变量，接收检查结果
+      let result = false;
+      // 检查方法
+      const check = (rows: IHeaderTree[]) => {
+        rows.forEach((row) => {
+          if (row.children) {
+            const list = row.children.map((o) => o.label);
+            if (list.includes(source) && list.includes(target)) {
+              result = true;
+            } else {
+              check(row.children);
+            }
+          }
+        });
+      };
+      // 执行检查
+      check(headerTrees);
+      // 返回结果
+      return result;
+    };
+
     return (
       <div ref={ref} {...rest}>
+        {headerList.map((cols, idx) => {
+          if (idx === headerList.length - 1) return;
+          return (
+            <div
+              className={cx(
+                'flex items-center bg-[#f8f8f8] border-b border-b-[#eee] sticky',
+                headerClass
+              )}
+              style={{
+                zIndex: 51,
+                width: realWidth,
+                height: titleHeight,
+                top: idx * titleHeight,
+              }}
+              key={idx}
+            >
+              <div style={{ width: canChecked ? checkBoxWidth : 0 }} />
+              {cols.map((col, idx2) => {
+                return (
+                  <div
+                    className={cx('overflow-hidden relative flex justify-center')}
+                    key={col}
+                    style={{ width: headerColumnWidth(col) + 8 }}
+                  >
+                    {headRenders[col]}
+                    {idx2 !== cols.length - 1 && (
+                      <div className="absolute right-0 h-[50%] top-[25%] w-0 border-r border-solid border-gray-500" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
         <div
           className={cx(
-            'flex items-center bg-[#f8f8f8] border-b border-b-[#eee] sticky top-0',
+            'flex items-center bg-[#f8f8f8] border-b border-b-[#eee] sticky',
             headerClass
           )}
           style={{
             zIndex: 51,
+            top: headerTrees.length && (headerList.length - 1) * titleHeight,
             height: titleHeight,
             width: realWidth,
           }}
@@ -79,8 +141,13 @@ const TableWrapper = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
               if (!active) return;
               setActiveLabel(String(active.id));
             }}
-            onDragEnd={({ over }) => {
+            onDragEnd={({ over, active }) => {
               if (!over) return;
+              // 如果标题存在树形关系，需要检查是否属于同一个父对象
+              if (headerTrees.length) {
+                const res = sameParent(String(active.id), String(over.id));
+                if (!res) return;
+              }
               // 这里是异步执行的，所以不影响后面的代码执行。
               setActiveLabel(null);
               const overIndex = getIndex(String(over.id));
@@ -163,7 +230,12 @@ const TableWrapper = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
         </div>
         <div
           className="sticky"
-          style={{ zIndex: 51, top: titleHeight, width: realWidth, boxShadow: '0 2px 4px 0 #eee' }}
+          style={{
+            zIndex: 51,
+            top: headerTrees.length ? headerList.length * titleHeight : titleHeight,
+            width: realWidth,
+            boxShadow: '0 2px 4px 0 #eee',
+          }}
         >
           {list.slice(0, fixedTopCount).map((row, index) => {
             return (

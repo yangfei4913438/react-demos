@@ -2,6 +2,9 @@ import Mockjs from 'mockjs';
 
 // 多语言值的显示类型
 export const PersonLabels = {
+  root: '用户信息表',
+  base: '基础资料',
+  more: '更多信息',
   name: '姓名',
   age: '年龄',
   status: '状态',

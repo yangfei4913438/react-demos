@@ -23,11 +23,11 @@ const Table: FC<IProps> = () => {
   const [widths, changeWidths] = useState<{ [key: string]: number }>({
     name: 0.15,
     age: 0.1,
-    status: 0.1,
     region: 0.1,
     city: 0.2,
     email: 0.25,
     phone: 0.15,
+    status: 0.1,
     visits: 0.1,
     last_visit: 0.2,
   });
@@ -128,8 +128,47 @@ const Table: FC<IProps> = () => {
     }
   };
 
+  // 标题的树形关系(最下层的标题列，必须是widths对象中定义过的，否则无法正确渲染)
+  const headerTrees = [
+    {
+      label: 'root',
+      children: [
+        {
+          label: 'base',
+          children: [
+            { label: 'name' },
+            { label: 'age' },
+            { label: 'region' },
+            { label: 'city' },
+            { label: 'email' },
+            { label: 'phone' },
+          ],
+        },
+        {
+          label: 'more',
+          children: [{ label: 'status' }, { label: 'visits' }, { label: 'last_visit' }],
+        },
+      ],
+    },
+  ];
+
   // 标题列的渲染方法
   const headRenders = {
+    root: (
+      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+        {PersonLabels.root}
+      </div>
+    ),
+    base: (
+      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+        {PersonLabels.base}
+      </div>
+    ),
+    more: (
+      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+        {PersonLabels.more}
+      </div>
+    ),
     name: (
       <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
         {PersonLabels.name}
@@ -358,6 +397,7 @@ const Table: FC<IProps> = () => {
           canChangeWidths={true}
           canDragSortColumn={true}
           textLayout="center"
+          headerTrees={headerTrees}
           headRenders={headRenders}
           cellRenders={cellRenders}
           // scrollingRender={scrollingRender}

@@ -11,11 +11,21 @@ interface ITableHead {
   disabled?: boolean;
   // 是否拖拽渲染
   dragOverlay?: boolean;
+  // 是否可以主动重置大小
+  canResize?: boolean;
+  // 是否为最后一个列
+  endCol?: boolean;
   // 子节点
   children: React.ReactNode;
 }
 
-const TableHead: FC<ITableHead> = ({ id, dragOverlay = false, children }) => {
+const TableHead: FC<ITableHead> = ({
+  id,
+  endCol = false,
+  canResize = true,
+  dragOverlay = false,
+  children,
+}) => {
   const {
     textLayout,
     labels,
@@ -78,10 +88,13 @@ const TableHead: FC<ITableHead> = ({ id, dragOverlay = false, children }) => {
             {filterRenders[id]}
           </div>
         )}
-        {canChangeWidths && canRender && !dragOverlay && (
+        {canChangeWidths && canResize && canRender && !dragOverlay && (
           <span onMouseDown={(e) => e.stopPropagation()}>
             <DragResize id={id} handleChangeWidth={(x) => onChangeWidth(id, x)} />
           </span>
+        )}
+        {!canResize && !endCol && (
+          <div className="absolute right-0 h-[50%] top-[25%] w-0 border-r-2 border-gray-500" />
         )}
       </div>
     </div>

@@ -32,6 +32,7 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
     setChecked,
     scrollingRender,
     columns,
+    headerList,
     fixedLeftCount,
     fixedRightCount,
     getLeftWidth,
@@ -46,7 +47,7 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
       )}
       style={{
         ...style,
-        top: id * rowHeight + titleHeight,
+        top: id * rowHeight + headerList.length * titleHeight,
         width: realWidth,
       }}
     >

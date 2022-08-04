@@ -3,6 +3,12 @@ import { type Dispatch, type ReactNode, type SetStateAction, createContext } fro
 // 勾选框的宽度
 export const checkBoxWidth = 44;
 
+// 标题行的树形结构
+export interface IHeaderTree {
+  label: string;
+  children?: IHeaderTree[];
+}
+
 export interface IWidths {
   [key: string]: number;
 }
@@ -60,6 +66,14 @@ export const VirtualTableContext = createContext<{
   getRightWidth: (idx: number) => number;
   // 渲染滚动行
   scrollingRender?: (index: number) => ReactNode;
+  // 标题行的层级关系
+  headerList: string[][];
+  // 根据header的key获取，宽度
+  headerColumnWidth: (key: string) => number;
+  // 表头的渲染方法
+  headRenders: { [key: string]: ReactNode };
+  // 标题行的树形层级关系
+  headerTrees: IHeaderTree[];
 }>({
   list: [],
   columns: [],
@@ -82,4 +96,8 @@ export const VirtualTableContext = createContext<{
   realWidth: 0,
   getLeftWidth: () => 0,
   getRightWidth: () => 0,
+  headerList: [],
+  headerColumnWidth: () => 0,
+  headRenders: {},
+  headerTrees: [],
 });

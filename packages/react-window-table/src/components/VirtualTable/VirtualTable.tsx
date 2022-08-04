@@ -1,4 +1,4 @@
-import { type ReactNode, type FC, type Dispatch, type SetStateAction, useState } from 'react';
+import { type Dispatch, type FC, type ReactNode, type SetStateAction, useState } from 'react';
 import {
   FixedSizeList,
   type ListChildComponentProps,
@@ -7,7 +7,7 @@ import {
 import AutoSizer from 'react-virtualized-auto-sizer';
 import TableWrapper from './TableWrapper';
 import TableRow from './TableRow';
-import { type IWidths, VirtualTableContext, checkBoxWidth } from './consts';
+import { type IHeaderTree, type IWidths, VirtualTableContext, checkBoxWidth } from './consts';
 
 export interface VirtualTableProps<T> {
   // 展示的数据
@@ -36,6 +36,8 @@ export interface VirtualTableProps<T> {
   cellRenders: { [key: string]: (row: T) => ReactNode };
   // 表头的渲染方法
   headRenders: { [key: string]: ReactNode };
+  // 标题行的树形层级关系
+  headerTrees?: IHeaderTree[];
   // 渲染滚动行
   scrollingRender?: (index: number) => ReactNode;
 
@@ -83,6 +85,7 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
   filterRenders,
   cellRenders,
   headRenders,
+  headerTrees = [],
   scrollingRender,
 
   changeWidths,
@@ -108,6 +111,25 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
 }: VirtualTableProps<T>) => {
   // 表格宽度
   const [tableWidth, setTableWidth] = useState<number>(0);
+
+  // 标题行的树形层级关系
+  const headerList: string[][] = [];
+  const getHeaderList = (rows: IHeaderTree[], idx: number) => {
+    if (!rows.length) return;
+    if (!headerList[idx]) {
+      headerList[idx] = rows.map((o) => o.label);
+    } else {
+      headerList[idx] = headerList[idx].concat(rows.map((o) => o.label));
+    }
+    rows.forEach((r) => r.children && getHeaderList(r.children, idx + 1));
+  };
+  // 生成列表
+  getHeaderList(headerTrees, 0);
+  // 树形关系存在，才可以
+  if (headerTrees?.length) {
+    // 最后一层使用可变列，便于拖拽
+    headerList[headerList.length - 1] = labels;
+  }
 
   // 宽度变更
   const onChangeWidth = (key: string, x: number) => {
@@ -162,6 +184,32 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
       headRenders,
       cellRenders: (rowData: T) => cellRenders[dataKey](rowData),
     };
+  };
+
+  // 获取下层的宽度，作为当前层的宽度
+  const getHeaderWidth = (row: IHeaderTree): number => {
+    if (row?.children) {
+      return row.children.map((r) => getHeaderWidth(r)).reduce((a, b) => (a ?? 0) + (b ?? 0) + 2);
+    }
+    return (widths[row.label] ?? 0) * tableWidth;
+  };
+
+  // 获取key的宽度
+  const getKeyWidth = (row: IHeaderTree, key: string): number => {
+    if (row.label === key) {
+      return getHeaderWidth(row);
+    }
+    if (row.children) {
+      return row.children.map((r) => getKeyWidth(r, key)).reduce((a, b) => a + b);
+    }
+    return -1;
+  };
+
+  // 渲染标题列
+  const headerColumnWidth = (key: string): number => {
+    // 找出符合
+    const res = headerTrees.map((r) => getKeyWidth(r, key)).filter((r) => r > -1);
+    return res[0];
   };
 
   // 生成列数组
@@ -224,6 +272,10 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
               sortRenders,
               onChangeWidth,
               realWidth: realWidth(),
+              headerList,
+              headerColumnWidth,
+              headRenders,
+              headerTrees,
               getLeftWidth,
               getRightWidth,
               scrollingRender,
@@ -265,7 +317,12 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
             {list.length === 0 && (
               <div
                 className="z-50 absolute bottom-0 left-0 bg-white"
-                style={{ width, top: titleHeight, height: height - titleHeight }}
+                style={{
+                  width,
+                  top:
+                    headerTrees?.length > 0 ? (headerList.length - 1) * titleHeight : titleHeight,
+                  height: height - titleHeight,
+                }}
               >
                 {emptyNode}
               </div>
