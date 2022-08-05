@@ -33,7 +33,7 @@ export interface VirtualTableProps<T> {
   // 列的筛选渲染
   filterRenders?: { [key: string]: ReactNode };
   // 列元素的渲染方法, 如: { name: this.cellRender, description: this.cellRender };
-  cellRenders: { [key: string]: (row: T) => ReactNode };
+  cellRenders: { [key: string]: (row: T, index: number) => ReactNode };
   // 表头的渲染方法
   headRenders: { [key: string]: ReactNode };
   // 标题行的树形层级关系
@@ -54,7 +54,7 @@ export interface VirtualTableProps<T> {
   // 表头的行类名
   headerClass?: string;
   // 表格的行类名
-  rowClass?: string;
+  rowClass?: (index: number) => string;
 
   // 顶部固定行数量
   fixedTopCount?: number;
@@ -97,7 +97,7 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
   titleHeight = 50,
   rowHeight = 45,
   headerClass,
-  rowClass,
+  rowClass = () => '',
 
   fixedTopCount = 0, // 默认不锁定行
   fixedLeftCount = 0, // 默认不锁定列
@@ -182,7 +182,7 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
       dataKey,
       width: widths[dataKey] * tableWidth,
       headRenders,
-      cellRenders: (rowData: T) => cellRenders[dataKey](rowData),
+      cellRenders: (rowData: T, index: number) => cellRenders[dataKey](rowData, index),
     };
   };
 
@@ -304,7 +304,7 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
                 return (
                   <TableRow
                     row={row}
-                    rowClass={rowClass}
+                    rowClass={rowClass(index + fixedTopCount)}
                     style={style}
                     index={index}
                     isScrolling={isScrolling}

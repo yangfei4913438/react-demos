@@ -1,6 +1,5 @@
-import { FC, useState, useLayoutEffect, useMemo } from 'react';
-
-import { IPerson, makeData, PersonLabels } from './makeData';
+import { type FC, type ReactNode, useState, useLayoutEffect, useMemo } from 'react';
+import { type IPerson, makeData, PersonLabels } from './makeData';
 import { VirtualTable } from '../VirtualTable';
 
 interface IProps {}
@@ -324,32 +323,36 @@ const Table: FC<IProps> = () => {
   };
 
   // 所有列的渲染方法
-  const cellRenders = {
-    name: (item: IPerson) => {
-      return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.name}</div>;
+  const cellRenders: { [key: string]: (row: IPerson, index: number) => ReactNode } = {
+    name: (item, index) => {
+      return (
+        <div className="text-ellipsis overflow-hidden whitespace-nowrap">
+          {item.name} - {index}
+        </div>
+      );
     },
-    age: (item: IPerson) => {
+    age: (item) => {
       return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.age}</div>;
     },
-    status: (item: IPerson) => {
+    status: (item) => {
       return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.status}</div>;
     },
-    region: (item: IPerson) => {
+    region: (item) => {
       return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.region}</div>;
     },
-    city: (item: IPerson) => {
+    city: (item) => {
       return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.city}</div>;
     },
-    email: (item: IPerson) => {
+    email: (item) => {
       return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.email}</div>;
     },
-    phone: (item: IPerson) => {
+    phone: (item) => {
       return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.phone}</div>;
     },
-    visits: (item: IPerson) => {
+    visits: (item) => {
       return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.visits}</div>;
     },
-    last_visit: (item: IPerson) => {
+    last_visit: (item) => {
       return (
         <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.last_visit}</div>
       );
@@ -387,7 +390,7 @@ const Table: FC<IProps> = () => {
           titleHeight={50}
           rowHeight={45}
           headerClass=""
-          rowClass=""
+          rowClass={(idx) => (checked.includes(idx) ? 'bg-[#ccc]' : '')}
           list={list}
           widths={widths}
           labels={labels}

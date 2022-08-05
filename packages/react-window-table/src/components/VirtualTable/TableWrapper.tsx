@@ -241,7 +241,7 @@ const TableWrapper = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
             return (
               <TableRow
                 row={row}
-                rowClass={rowClass}
+                rowClass={rowClass(index)}
                 style={{ top: index * rowHeight, height: rowHeight }}
                 index={index}
                 key={index}

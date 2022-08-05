@@ -31,7 +31,7 @@ export const VirtualTableContext = createContext<{
   // 表头的行类名
   headerClass?: string;
   // 表格的行类名
-  rowClass?: string;
+  rowClass: (index: number) => string;
   // 文字布局
   textLayout?: 'left' | 'center';
   // 列名的国际化变量, 如: { name: strings.NAME, description: strings.DESCRIPTION }
@@ -100,4 +100,5 @@ export const VirtualTableContext = createContext<{
   headerColumnWidth: () => 0,
   headRenders: {},
   headerTrees: [],
+  rowClass: () => '',
 });

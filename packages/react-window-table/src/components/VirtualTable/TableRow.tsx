@@ -47,7 +47,8 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
       )}
       style={{
         ...style,
-        top: id * rowHeight + headerList.length * titleHeight,
+        top:
+          id * rowHeight + (headerList.length > 0 ? headerList.length * titleHeight : titleHeight),
         width: realWidth,
       }}
     >
@@ -87,7 +88,7 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
                 style={style}
                 key={idx}
               >
-                {item?.cellRenders(row)}
+                {item?.cellRenders(row, id)}
               </div>
             );
           })}
