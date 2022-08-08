@@ -1,4 +1,10 @@
-import { type Dispatch, type ReactNode, type SetStateAction, createContext } from 'react';
+import {
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+  type MouseEvent,
+  createContext,
+} from 'react';
 
 // 勾选框的宽度
 export const checkBoxWidth = 44;
@@ -32,6 +38,8 @@ export const VirtualTableContext = createContext<{
   headerClass?: string;
   // 表格的行类名
   rowClass: (index: number) => string;
+  // 行点击事件
+  rowClick: (e: MouseEvent<HTMLDivElement>, index: number) => void;
   // 文字布局
   textLayout?: 'left' | 'center';
   // 列名的国际化变量, 如: { name: strings.NAME, description: strings.DESCRIPTION }
@@ -101,4 +109,5 @@ export const VirtualTableContext = createContext<{
   headRenders: {},
   headerTrees: [],
   rowClass: () => '',
+  rowClick: () => undefined,
 });

@@ -37,6 +37,7 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
     fixedRightCount,
     getLeftWidth,
     getRightWidth,
+    rowClick,
   } = useContext(VirtualTableContext);
 
   return (
@@ -51,6 +52,7 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
           id * rowHeight + (headerList.length > 0 ? headerList.length * titleHeight : titleHeight),
         width: realWidth,
       }}
+      onClick={(e) => rowClick(e, id)}
     >
       {!isScrolling && canChecked && (
         <IndeterminateCheckbox
@@ -80,7 +82,6 @@ const TableRow: FC<TableRowProps<any>> = <T,>({
             return (
               <div
                 className={cx('relative flex h-full flex-col justify-center overflow-hidden', {
-                  'px-3': textLayout === 'left',
                   'text-center': textLayout === 'center',
                   'bg-inherit sticky left-0 z-50': idx < fixedLeftCount,
                   'bg-inherit sticky right-0 z-50': idx > labels.length - fixedRightCount - 1,

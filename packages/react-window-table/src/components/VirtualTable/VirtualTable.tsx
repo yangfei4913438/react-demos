@@ -1,4 +1,11 @@
-import { type Dispatch, type FC, type ReactNode, type SetStateAction, useState } from 'react';
+import {
+  type Dispatch,
+  type FC,
+  type MouseEvent,
+  type ReactNode,
+  type SetStateAction,
+  useState,
+} from 'react';
 import {
   FixedSizeList,
   type ListChildComponentProps,
@@ -55,6 +62,8 @@ export interface VirtualTableProps<T> {
   headerClass?: string;
   // 表格的行类名
   rowClass?: (index: number) => string;
+  // 行点击事件
+  rowClick?: (e: MouseEvent<HTMLDivElement>, index: number) => void;
 
   // 顶部固定行数量
   fixedTopCount?: number;
@@ -98,6 +107,7 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
   rowHeight = 45,
   headerClass,
   rowClass = () => '',
+  rowClick = () => undefined,
 
   fixedTopCount = 0, // 默认不锁定行
   fixedLeftCount = 0, // 默认不锁定列
@@ -264,6 +274,7 @@ const VirtualTable: FC<VirtualTableProps<any>> = <T,>({
               canChangeWidths,
               headerClass,
               rowClass,
+              rowClick,
               canDragSortColumn,
               canChecked,
               checked,

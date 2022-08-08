@@ -154,62 +154,62 @@ const Table: FC<IProps> = () => {
   // 标题列的渲染方法
   const headRenders = {
     root: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.root}
       </div>
     ),
     base: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.base}
       </div>
     ),
     more: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.more}
       </div>
     ),
     name: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.name}
       </div>
     ),
     age: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.age}
       </div>
     ),
     status: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.status}
       </div>
     ),
     region: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.region}
       </div>
     ),
     city: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.city}
       </div>
     ),
     email: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.email}
       </div>
     ),
     phone: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.phone}
       </div>
     ),
     visits: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.visits}
       </div>
     ),
     last_visit: (
-      <div className="text-ellipsis overflow-hidden whitespace-nowrap text-lg font-bold">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3 text-lg font-bold">
         {PersonLabels.last_visit}
       </div>
     ),
@@ -326,35 +326,59 @@ const Table: FC<IProps> = () => {
   const cellRenders: { [key: string]: (row: IPerson, index: number) => ReactNode } = {
     name: (item, index) => {
       return (
-        <div className="text-ellipsis overflow-hidden whitespace-nowrap">
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3">
           {item.name} - {index}
         </div>
       );
     },
     age: (item) => {
-      return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.age}</div>;
+      return (
+        <div
+          className="overflow-hidden text-ellipsis whitespace-nowrap px-3"
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log('-------e:', e);
+          }}
+        >
+          {item.age}
+        </div>
+      );
     },
     status: (item) => {
-      return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.status}</div>;
+      return (
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3">{item.status}</div>
+      );
     },
     region: (item) => {
-      return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.region}</div>;
+      return (
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3">{item.region}</div>
+      );
     },
     city: (item) => {
-      return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.city}</div>;
+      return (
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3">{item.city}</div>
+      );
     },
     email: (item) => {
-      return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.email}</div>;
+      return (
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3">{item.email}</div>
+      );
     },
     phone: (item) => {
-      return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.phone}</div>;
+      return (
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3">{item.phone}</div>
+      );
     },
     visits: (item) => {
-      return <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.visits}</div>;
+      return (
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3">{item.visits}</div>
+      );
     },
     last_visit: (item) => {
       return (
-        <div className="text-ellipsis overflow-hidden whitespace-nowrap">{item.last_visit}</div>
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap px-3">
+          {item.last_visit}
+        </div>
       );
     },
   };
@@ -390,7 +414,8 @@ const Table: FC<IProps> = () => {
           titleHeight={50}
           rowHeight={45}
           headerClass=""
-          rowClass={(idx) => (checked.includes(idx) ? 'bg-[#ccc]' : '')}
+          rowClass={(idx) => (checked.includes(idx) ? 'bg-green-500 hover:bg-green-200' : '')}
+          rowClick={(e, idx) => console.log(idx, e)}
           list={list}
           widths={widths}
           labels={labels}

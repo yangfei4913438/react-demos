@@ -60,7 +60,7 @@ const TableHead: FC<ITableHead> = ({
           canDragSortColumn && dragOverlay && 'cursor-grabbing shadow-lg bg-white',
           canDragSortColumn && !dragOverlay && 'cursor-grab touch-manipulation',
           {
-            'px-3 justify-start': textLayout === 'left',
+            'justify-start': textLayout === 'left',
             'justify-center': textLayout === 'center',
           }
         )}
