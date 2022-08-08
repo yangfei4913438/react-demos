@@ -24,6 +24,10 @@
 
 ### 项目列表
 
+- react-context-mobx
+
+  > 基于 react context 使用 mobx
+
 - redux-use-hooks
 
   > 基于 react hooks 使用 redux
@@ -47,7 +51,7 @@
 - dnd-kit-resize
 
   > 基于 dnd-kit 实现的一个容器宽度，拖拽调整的简单例子。
-   
-- react-context-mobx
+ 
+- react-cropper-demo
 
-  > 基于 react context 使用 mobx
+  > 基于 react-cropper 实现的一个简单例子。

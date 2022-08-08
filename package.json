@@ -1,11 +1,14 @@
 {
   "name": "react-demos",
   "scripts": {
+    "dev:mobx": "pnpm --filter 'react-context-mobx' dev",
     "dev:redux": "pnpm --filter 'redux-use-hooks' dev",
     "dev:table": "pnpm --filter 'react-window-table' dev",
     "dev:live": "pnpm --filter 'react-live-demo' dev",
     "dev:swiper": "pnpm --filter 'react-tiga-swiper' dev",
-    "dev:dnd": "pnpm --filter 'dnd-kit-demo' dev"
+    "dev:dnd": "pnpm --filter 'dnd-kit-demo' dev",
+    "dev:dnd-resize": "pnpm --filter 'dnd-kit-resize' dev",
+    "dev:cropper": "pnpm --filter 'react-cropper-demo' dev"
   },
   "devDependencies": {
     "prettier": "^2.7.0"
