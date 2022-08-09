@@ -1,6 +1,6 @@
 ## 中文说明：
 
-mobx 的使用范例。
+基于 react context 使用 mobx.
 
 - 注意：
 
@@ -8,7 +8,7 @@ mobx 的使用范例。
 
 ## English Description.
 
-Example of using mobx.
+Using mobx based on the react context.
 
 - Tips:
 

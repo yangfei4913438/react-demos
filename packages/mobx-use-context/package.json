@@ -1,5 +1,5 @@
 {
-  "name": "react-context-mobx",
+  "name": "mobx-use-context",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",

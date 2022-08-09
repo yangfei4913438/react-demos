@@ -24,7 +24,7 @@
 
 ### 项目列表
 
-- react-context-mobx
+- mobx-use-context
 
   > 基于 react context 使用 mobx
 

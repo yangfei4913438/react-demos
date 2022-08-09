@@ -1,7 +1,7 @@
 {
   "name": "react-demos",
   "scripts": {
-    "dev:mobx": "pnpm --filter 'react-context-mobx' dev",
+    "dev:mobx": "pnpm --filter 'mobx-use-context' dev",
     "dev:redux": "pnpm --filter 'redux-use-hooks' dev",
     "dev:table": "pnpm --filter 'react-window-table' dev",
     "dev:live": "pnpm --filter 'react-live-demo' dev",

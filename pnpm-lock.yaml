@@ -112,7 +112,7 @@ importers:
       typescript: 4.7.4
       vite: 2.9.12
 
-  packages/react-context-mobx:
+  packages/mobx-use-context:
     specifiers:
       '@tailwindcss/aspect-ratio': ^0.4.0
       '@tailwindcss/forms': ^0.5.2
