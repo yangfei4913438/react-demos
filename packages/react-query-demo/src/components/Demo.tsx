@@ -2,6 +2,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import Mock from 'mockjs';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { queryClient } from '../consts';
 
 const getPeople = () => {
   const mock_data = {
@@ -18,13 +19,16 @@ const Demo = () => {
   const [pEdit, setPEdit] = useState<any>();
 
   // 获取操作
-  const { isLoading, data, refetch } = useQuery(
+  const { isLoading, data } = useQuery(
     ['repoData'],
     () => fetch('/api/v1/peoples').then((res) => res.json()),
     {
       initialData: [],
     }
   );
+
+  // 重新查询，让查询失效
+  const reQuery = () => queryClient.invalidateQueries({ queryKey: ['repoData'] });
 
   // 添加操作，完成后重新获取数据
   const add = useMutation((send: any) =>
@@ -35,14 +39,14 @@ const Demo = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(send),
-    }).then(() => refetch({ queryKey: ['repoData'] }))
+    }).then(reQuery)
   );
 
   // 删除操作，完成后重新获取数据
   const del = useMutation((id: number) =>
     fetch(`/api/v1/peoples/${id}`, {
       method: 'DELETE',
-    }).then(() => refetch({ queryKey: ['repoData'] }))
+    }).then(reQuery)
   );
 
   // 全局更新，完成后重新获取数据
@@ -54,7 +58,7 @@ const Demo = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(send),
-    }).then(() => refetch({ queryKey: ['repoData'] }))
+    }).then(reQuery)
   );
 
   // 局部更新
@@ -66,7 +70,7 @@ const Demo = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(send),
-    }).then(() => refetch({ queryKey: ['repoData'] }))
+    }).then(reQuery)
   );
 
   useEffect(() => {
@@ -85,7 +89,7 @@ const Demo = () => {
         <button className="btn" onClick={() => add.mutate(getPeople())}>
           新增一条记录
         </button>
-        <button className="btn btn-primary" onClick={() => refetch({ queryKey: ['repoData'] })}>
+        <button className="btn btn-primary" onClick={reQuery}>
           刷新
         </button>
       </div>
@@ -108,6 +112,7 @@ const Demo = () => {
                   <input
                     className="input input-bordered h-6 w-full"
                     value={pEdit.name}
+                    autoFocus
                     onBlur={async () => {
                       if (pEdit && pEdit?.id === o.id && pEdit.name !== o.name) {
                         await patch.mutate({ id: o.id, send: { name: pEdit.name } });
