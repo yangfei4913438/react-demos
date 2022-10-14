@@ -6,6 +6,7 @@
     "dev:live": "pnpm --filter 'react-live-demo' dev",
     "dev:swiper": "pnpm --filter 'react-tiga-swiper' dev",
     "dev:dnd": "pnpm --filter 'dnd-kit-demo' dev",
+    "dev:dnd-multiple": "pnpm --filter 'dnd-kit-multiple' dev",
     "dev:dnd-resize": "pnpm --filter 'dnd-kit-resize' dev",
     "dev:cropper": "pnpm --filter 'react-cropper-demo' dev"
   },

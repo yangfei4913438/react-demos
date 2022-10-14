@@ -51,6 +51,10 @@
 - dnd-kit-resize
 
   > 基于 dnd-kit 实现的一个容器宽度，拖拽调整的简单例子。
+
+- dnd-kit-multiple
+
+  > 多个容器之间的数据拖拽
  
 - react-cropper-demo
 
