@@ -39,10 +39,6 @@
 - react-tiga-swiper
 
   > React 轮播图组件
- 
-- react-window-table
-  
-  > 基于 react-window 库编写的一个超灵活的表格。使用了 dnd-kit 来实现列的顺序拖拽调换，列的宽度拖拽调整。
 
 - dnd-kit-demo
 
