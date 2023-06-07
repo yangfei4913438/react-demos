@@ -28,10 +28,6 @@
 
   > 基于 react context 使用 mobx
 
-- redux-use-hooks
-
-  > 基于 react hooks 使用 redux
-
 - react-live-demo
 
   > 可以在web页面上，实时渲染 React 代码的组件库. 常见应用: Web IDE.
